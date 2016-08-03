@@ -153,7 +153,7 @@
       var board = this.rows();
       var result = false;
 
-      for (var i = -3; i < board.length; i++) {
+      for (var i = -board.length; i < board.length; i++) {
         if (this.hasMajorDiagonalConflictAt(i)) {
           result = true;
           break;
@@ -188,7 +188,7 @@
       var board = this.rows();
       var result = false;
 
-      for (var i = board.length + 2; i > 0; i--) {
+      for (var i = board.length + board.length; i > 0; i--) {
         if (this.hasMinorDiagonalConflictAt(i)) {
           result = true;
           break;
