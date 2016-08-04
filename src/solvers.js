@@ -38,15 +38,55 @@ window.countNRooksSolutions = function(n) {
     }
     return n * factorial(n - 1);
   };
-  // console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
   return factorial(n);
 };
 
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n queens placed such that none of them can attack each other
 window.findNQueensSolution = function(n) {
-  var solution = undefined; //fixme
+  //recursive function ( parameters)
+  var solution;
+  var gridLoop = function(start) {
+    console.log(newBoard);
+    var newBoard = new Board({'n': n});
+  // var counter
+    var counter = 0;
+  // if n = 0, return. 
+    if ( n !== 0 && start === n) {
+      console.log('start === n', start);
+      var newerBoard = new Board({'n': 0});
+      solution = newerBoard.rows();
+      return;
+    }
+    // create a for-loop for x
+    for (var y = 0; y < n; y++) {
+      for (var x = 0; x < n; x++) {
+        if ( x === 0 && y === 0) {
+          x = x + start;
+        }
 
-  console.log('Single solution for ' + n + ' queens:', JSON.stringify(solution));
+        newBoard.togglePiece(x, y);
+        // if toggled point fails test, untoggle (and move onto the next row?)
+        if (newBoard.hasAnyQueenConflictsOn(x, y)) {
+          newBoard.togglePiece(x, y);
+        } else {
+        //else increase counter
+          counter++;
+        }
+      }
+    }    
+    // at end - if counter equals n, store this solution
+    if (counter === n) {
+      solution = newBoard.rows();
+      return; 
+    } else {
+    //else recurse with changed starting position (n-1)
+      // console.log('start: ', start);
+      return gridLoop(start + 1);
+    }
+  };
+  gridLoop(0);
+  // console.log('Single solution for ' + n + ' queens:', JSON.stringify(solution));
+  console.log('solution: ', solution, 'n:', n);
   return solution;
 };
 
