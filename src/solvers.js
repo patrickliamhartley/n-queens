@@ -22,24 +22,106 @@ window.makeEmptyMatrix = function(n) {
   });
 };
 
+
 window.findNRooksSolution = function(n) {
-  var newBoard = window.makeEmptyMatrix(n);
-  for (var i = 0; i < newBoard.length; i++) {
-    newBoard[i][i] = 1;
-  }
-  return newBoard;
+ 
+
+};
+
+
+window.countNRooksSolutions = function(n) {
+  var solutionCount = 0;
+  var board = new Board({n: n});
+  
+  
+  // console.log(board.rows());
+
+  var solver = function(row) { 
+    
+  
+    for (var i = 0; i < n; i++) {
+      if (row === n - 1 && !board.hasAnyRooksConflicts()) {
+        solutionCount++;
+        return;
+      }
+      board.togglePiece(row, i);
+      // console.log(board.rows());
+     
+      if (!board.hasAnyRooksConflicts()) {
+
+        solver(row + 1);
+      }
+      board.togglePiece(row, i);
+    }
+
+  
+
+  };
+  solver(0);
+  return solutionCount;
+};
+
+
+
+window.findNQueensSolution = function(n) {
+};
+
+window.countNQueensSolutions = function(n) {
+  var solutionCount = 0;
+  var board = new Board({n: n});
+  
+ 
+  // console.log(board.rows());
+
+  var solver = function(row) {  
+    if (row === n) {
+      solutionCount++;
+      return;
+    }
+    
+  
+    for (var i = 0; i < n; i++) {
+      
+      board.togglePiece(row, i);
+      // console.log(board.rows());
+
+     
+      if (!board.hasAnyQueensConflicts()) {
+
+        solver(row + 1);
+      }
+      board.togglePiece(row, i);
+    }
+
+  
+
+  };
+  solver(0);
+  return solutionCount;
+
+
+
+
+  
 };
 
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
-window.countNRooksSolutions = function(n) {
-  var factorial = function(n) {
-    if (n === 0) {
-      return 1;
-    }
-    return n * factorial(n - 1);
-  };
-  return factorial(n);
-};
+// window.countNRooksSolutions = function(n) {
+//   var factorial = function(n) {
+//     if (n === 0) {
+//       return 1;
+//     }
+//     return n * factorial(n - 1);
+//   };
+//   return factorial(n);
+// };
+
+// window.findNRooksSolution = function(n) {
+//   var newBoard = window.makeEmptyMatrix(n);
+//   for (var i = 0; i < newBoard.length; i++) {
+//     newBoard[i][i] = 1;
+//   }
+//   return newBoard;
 
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n queens placed such that none of them can attack each other
 // window.findNQueensSolution = function(n) {
@@ -157,123 +239,117 @@ window.countNRooksSolutions = function(n) {
 // };
 
 
-////alternate solution idea/////
-window.findNQueensSolution = function(n) {
-  var size = n;
-  var boardObj = new Board({"n": size});
-  console.log("size" + size);
-  console.log(boardObj.rows());
+// ////alternate solution idea/////
+// window.findNQueensSolution = function(n) {
+//   var size = n;
+//   var boardObj = new Board({"n": size});
+//   console.log("size" + size);
+//   console.log(boardObj.rows());
 
 
-  pieceThere = function (x, y) {
-    if (boardObj.get(x)[y] === 1) {
-      return true;
-    } else {
-      return false;
-    }
-  };
+//   pieceThere = function (x, y) {
+//     if (boardObj.get(x)[y] === 1) {
+//       return true;
+//     } else {
+//       return false;
+//     }
+//   };
 
-  forwardSearch = function (x, y, board, counter, forward) {
-    // var boardObj = board || new Board({n: size});
-    // console.log("fsearch board"+boardObj.rows());
-    var boardValue = boardObj.rows();
-    var counter = counter || 0;
-    var x = x || 0;
-    var y = y || 0;
-    var forward = forward || true;
-    // console.log(x,y);
+//   forwardSearch = function (x, y, board, counter, forward) {
+//     // var boardObj = board || new Board({n: size});
+//     // console.log("fsearch board"+boardObj.rows());
+//     var boardValue = boardObj.rows();
+//     var counter = counter || 0;
+//     var x = x || 0;
+//     var y = y || 0;
+//     var forward = forward || true;
+//     // console.log(x,y);
 
 
-    boardObj.togglePiece(x, y);
-    counter++;
-    if (boardObj.hasAnyQueenConflictsOn(x, y)) {
-      boardObj.togglePiece(x, y);
-      counter--;
-    }   
-    if (counter !== 0 && counter === n) {
-      console.log(boardObj.rows() + "IS A SOLUTION");
-      return boardValue;
+//     boardObj.togglePiece(x, y);
+//     counter++;
+//     if (boardObj.hasAnyQueenConflictsOn(x, y)) {
+//       boardObj.togglePiece(x, y);
+//       counter--;
+//     }   
+//     if (counter !== 0 && counter === n) {
+//       console.log(boardObj.rows() + "IS A SOLUTION");
+//       return boardValue;
 
-    } 
+//     } 
 
-    if (x === boardValue.length - 1 && y < boardValue.length-1 ) {
-      // console.log("down");
-      // console.log(boardObj.rows());
-      return forwardSearch(0, y + 1, boardObj, counter, forward);
-    } else if (x < boardValue.length - 1 ) {
-      // console.log("right");
-      // console.log(boardObj.rows());
-      return forwardSearch(x + 1, y, boardObj, counter, forward);
-    }
+//     if (x === boardValue.length - 1 && y < boardValue.length-1 ) {
+//       // console.log("down");
+//       // console.log(boardObj.rows());
+//       return forwardSearch(0, y + 1, boardObj, counter, forward);
+//     } else if (x < boardValue.length - 1 ) {
+//       // console.log("right");
+//       // console.log(boardObj.rows());
+//       return forwardSearch(x + 1, y, boardObj, counter, forward);
+//     }
 
     
 
-    if (x === boardValue.length - 1 && y === boardValue.length - 1 && counter !== n) {
-      console.log("COMMENCE BACKTRACING");
-      // console.log(boardObj.rows());
-      return backSearch(x, y, boardObj, counter, false);
+//     if (x === boardValue.length - 1 && y === boardValue.length - 1 && counter !== n) {
+//       console.log("COMMENCE BACKTRACING");
+//       // console.log(boardObj.rows());
+//       return backSearch(x, y, boardObj, counter, false);
       
-    }
+//     }
 
-    // if (forward === false) {
-    //   backSearch(x, y, board, counter, forward);
-    //   console.log(boardValue);
-    // }
-  };
+//     // if (forward === false) {
+//     //   backSearch(x, y, board, counter, forward);
+//     //   console.log(boardValue);
+//     // }
+//   };
 
-  backSearch = function(x, y, board, counter, forward) {
-    var boardObj = board || new Board({n: size});
-    var boardValue = boardObj.rows();
-    var counter = counter || 0;
-    var x = x || 0;
-    var y = y || 0;
-    // console.log("back", x, y);
+//   backSearch = function(x, y, board, counter, forward) {
+//     var boardObj = board || new Board({n: size});
+//     var boardValue = boardObj.rows();
+//     var counter = counter || 0;
+//     var x = x || 0;
+//     var y = y || 0;
+//     // console.log("back", x, y);
 
-    if ( x < 0 ) {
-      x = 0;
-    }
-    if ( y < 0) {
-      y = 0;
-    }
+//     if ( x < 0 ) {
+//       x = 0;
+//     }
+//     if ( y < 0) {
+//       y = 0;
+//     }
 
 
-    if (pieceThere(x, y)) {
-      boardObj.togglePiece(x, y);
-      counter--;
-      // console.log("piece removed");
-      if (x === boardValue.length - 1 && y < boardValue.length - 1 ) {
-        return forwardSearch(x, y + 1, boardObj, counter, true);
-      } else if (x < boardValue.length - 1 ) {
-        return forwardSearch(x + 1, y, boardObj, counter, true);
-      } else {
-        return backSearch( x - 1, y, boardObj, counter, forward);
-      }
+//     if (pieceThere(x, y)) {
+//       boardObj.togglePiece(x, y);
+//       counter--;
+//       // console.log("piece removed");
+//       if (x === boardValue.length - 1 && y < boardValue.length - 1 ) {
+//         return forwardSearch(x, y + 1, boardObj, counter, true);
+//       } else if (x < boardValue.length - 1 ) {
+//         return forwardSearch(x + 1, y, boardObj, counter, true);
+//       } else {
+//         return backSearch( x - 1, y, boardObj, counter, forward);
+//       }
 
-    } else if ( x === 0 && y === 0) {
-      return forwardSearch(x + Math.ceil(Math.random() * n), boardObj, counter, true);
-    } else {
-      if (x === 0) {
-        // console.log("boardValue.length - 1" + boardValue.length - 1);
-        return backSearch(boardValue.length - 1, y - 1, boardObj, counter, forward);
-      } else {
-        return backSearch(x - 1, y, boardObj, counter, forward);
-      }    
-    }
-  };
+//     } else if ( x === 0 && y === 0) {
+//       return forwardSearch(x + Math.ceil(Math.random() * n), boardObj, counter, true);
+//     } else {
+//       if (x === 0) {
+//         // console.log("boardValue.length - 1" + boardValue.length - 1);
+//         return backSearch(boardValue.length - 1, y - 1, boardObj, counter, forward);
+//       } else {
+//         return backSearch(x - 1, y, boardObj, counter, forward);
+//       }    
+//     }
+//   };
   
-  if (size !== 0) {
-    console.log("initated");
-    return forwardSearch(0, 0, boardObj, 0, true);
-  } else {
-    return [];
-  }
-};
-/////////end alt solution////
+//   if (size !== 0) {
+//     console.log("initated");
+//     return forwardSearch(0, 0, boardObj, 0, true);
+//   } else {
+//     return [];
+//   }
+// };
+// /////////end alt solution////
 
 // return the number of nxn chessboards that exist, with n queens placed such that none of them can attack each other
-window.countNQueensSolutions = function(n) {
-  var solution = undefined; //fixme
-
-  console.log('Number of solutions for ' + n + ' queens:', solutionCount);
-  return solutionCount;
-};
